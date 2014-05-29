@@ -18,6 +18,11 @@ $(function() {
                 } else {
                     self.get('markers').client.setPosition(latlng);
                 }
+
+		// push position into server
+                $.post("api/push_position.php", { lat: position.coords.latitude, long: position.coords.longitude }, function(data) {
+                    console.log("posting position " + data);
+                });		
             } else {
                 //alert('You need to enable location services to use this app!')
             }
@@ -26,28 +31,45 @@ $(function() {
     }});
 
     refreshMarkers(); 
+
+    // login page
+    $("#login").click(function() {
+       $.post("api/login.php", {
+           phone: $("#phone").val(),
+           password: $("#password").val()  
+       }, function(data) { // success
+           window.location = "index.html#mainpage";
+       }).fail(function(data) { // failure
+           $("#login_status").html("You have entered a wrong phone # or password.");
+       });;
+    });
 });
 
 function refreshMarkers() {
     var current_markers = $('#main_map').gmap('get','markers');
 
-    $.getJSON('js/testdata/event_attendees.json', function(data) {
+    $.getJSON('api/get_users.php', function(data) {
         $.each(data.attendees, function (i, attendee) {
             var marker_key = 'marker_user_' + attendee.id;
+
+            var contents = attendee.username + ': ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
+            if (attendee.photo_exists) {
+                contents += "<br><img src='api/get_picture.php?id=" + attendee.id + "' width='200' />";
+            }
 
             if (marker_key in current_markers) {
                 current_markers[marker_key].setPosition(new google.maps.LatLng(attendee.latitude, attendee.longitude));
                 google.maps.event.clearListeners(current_markers[marker_key], 'click');
                 google.maps.event.addListener(current_markers[marker_key], 'click', function() {
-                    $('#main_map').gmap('openInfoWindow', { content: 'Hello World! This is ' + attendee.username + ' with updated message ' + attendee.message }, this);
-                })
+                    $('#main_map').gmap('openInfoWindow', { content: contents }, this);
+                });
             } else {
                 $('#main_map').gmap('addMarker', { 
                     id: 'marker_user_' + attendee.id,
                     position: new google.maps.LatLng(attendee.latitude, attendee.longitude), 
                     bounds: true 
                 }).click(function() {
-                    $('#main_map').gmap('openInfoWindow', { content: 'Hello World! This is ' + attendee.username + ' with message ' + attendee.message }, this);
+                    $('#main_map').gmap('openInfoWindow', { content: contents }, this);
                 });
             }
         });
@@ -55,5 +77,5 @@ function refreshMarkers() {
 
     console.log($('#main_map').gmap('get','markers'));
 
-    setTimeout(refreshMarkers, 30000);
+    setTimeout(refreshMarkers, 2000);
 }
