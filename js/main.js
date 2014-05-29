@@ -43,7 +43,37 @@ $(function() {
            $("#login_status").html("You have entered a wrong phone # or password.");
        });;
     });
+
 });
+
+$(document).on('pagebeforeshow', '#summarypage', function() {
+    console.log("runnin");
+    $("#friendslist").html("");
+    $('#friendslist').listview();
+    $.getJSON('api/get_users.php', function(data) {
+        var att_length = Object.keys(data.attendees).length;
+        var counter = 0;
+        $.each(data.attendees, function (i, attendee) {
+            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='100' height='100'/>" + "<a href='index.html#mainpage'>" + attendee.username + ": " + attendee.message + "</a>";
+            var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
+            if (counter == 0) {
+                //summarymessage += ' ui-first-child';
+            } else if (counter == (att_length - 1)) {
+                //summarymessage += ' ui-last-child';
+            }
+            summarymessage += '" style="border-bottom: 1px solid lightgrey">' + contents  + '</li>';
+            counter += 1;
+            console.log(summarymessage);
+            $('#friendslist').append(summarymessage);
+        });
+    });
+    $('#friendslist').listview('refresh');
+});
+
+function updateCenter(lat, lon) {
+    console.log("here");
+    defaultPosition = { 'center': lat + ',' + lon, 'zoom': 15 };
+}
 
 function refreshMarkers() {
     var current_markers = $('#main_map').gmap('get','markers');
@@ -51,12 +81,10 @@ function refreshMarkers() {
     $.getJSON('api/get_users.php', function(data) {
         $.each(data.attendees, function (i, attendee) {
             var marker_key = 'marker_user_' + attendee.id;
-
             var contents = attendee.username + ': ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
             if (attendee.photo_exists) {
                 contents += "<br><img src='api/get_picture.php?id=" + attendee.id + "' width='200' />";
             }
-
             if (marker_key in current_markers) {
                 current_markers[marker_key].setPosition(new google.maps.LatLng(attendee.latitude, attendee.longitude));
                 google.maps.event.clearListeners(current_markers[marker_key], 'click');

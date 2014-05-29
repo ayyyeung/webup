@@ -3,7 +3,9 @@
 <head>
     <title>Webup</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name=apple-mobile-web-app-capable content=yes>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <link rel="stylesheet" type="text/css" href="main.css" />
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU-PeXo4Aocq7-JS9SR4yUT1tFLLHFRWU&sensor=true&libraries=places"></script>
@@ -11,9 +13,14 @@
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.services.js"></script>
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.extensions.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet' type='text/css'>
     <script type="text/javascript">
-
+window.addEventListener("load",function() {
+ alert("hey");
+    setTimeout(function(){
+        window.scrollTo(0, 1);
+    }, 0);
+});
 
 
     </script>
@@ -21,17 +28,12 @@
 
 <body>
     <div data-role="page" id="loginpage">
-       <div data-role="header">
-            <h1>Webup Login</h1>
-       </div>
        <div data-role="main" class="ui-content">
-            <div id="login_status">Please type in your phone # and password here.</div>
-            <form>
-                 <label for="phone">Phone Number:</label>
-                 <input type="tel" data-clear-btn="false" name="phone" id="phone" value="">
-                 <label for="password">Password:</label>
-                 <input type="passworD" data-clear-btn="false" name="password" id="password" value="">
-                 <a href="#" class="ui-btn" id="login">Login</a>
+            <div id="login_status">MeetUp</div>
+            <form data-enhance="false">
+                 <input type="tel" class="login-input" data-clear-btn="false" name="phone" id="phone" value="" placeholder="Phone">
+                 <input type="passworD" class="login-input" data-clear-btn="false" name="password" id="password" value="" placeholder="Password">
+                 <a href="#" id="login">Log in >></a>
             </form>
        </div>
     </div>
@@ -56,7 +58,7 @@
         </div>
         <div data-role="footer">
            <div data-role="navbar">
-              <ul><li><a href="#postmessage">Post</li><li><a href="#">Invite</a></li><li><a href="#">Friends</a></li></ul>
+              <ul><li><a href="#postmessage">Post</li><li><a href="#">Invite</a></li><li><a href="#summarypage">Friends</a></li></ul>
            </div>
         </div>
     </div>
@@ -64,19 +66,30 @@
     <div data-role="page" id="postmessage">
         <div data-role="header">
             <a href="#mainpage" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
-            <h1>Post A Message</h1>
+            <h1>Post Status</h1>
             <a href="#" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" data-role="button" role="button">
                 Post
             </a>
         </div>
         <div role="main" class="ui-content">
             <form action="api/set_status.php" method="post" data-ajax="false" enctype="multipart/form-data">
-                <label for="textarea-1">Message:</label>
+                <label for="textarea-1">Status:</label>
                 <textarea name="message" id="message"></textarea>
                 <label for="image">Photo:</label>
-                <input type="file"  name="image" accept="image/*" capture>
+                <input type="file"  name="image" accept="image/*" >
 		<input type="submit" class="ui-btn" id="update_status" name="update_status" value="Update Status">
             </form>
+        </div>
+    </div>
+
+    <div data-role="page" id="summarypage">
+        <div data-role="header">
+            <a href="#mainpage" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
+            <h1>Friend Summary</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <ul data-role="listview" id="friendslist">
+            </ul>
         </div>
     </div>
 </body>

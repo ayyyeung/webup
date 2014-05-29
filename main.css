@@ -1,0 +1,73 @@
+.ui-body-a, .ui-page-theme-a .ui-body-inherit, html .ui-bar-a .ui-body-inherit, html .ui-body-a .ui-body-inherit, html body .ui-group-theme-a .ui-body-inherit, html .ui-panel-page-container-a {
+  background-color:transparent;
+  border-color:transparent;
+  text-shadow:none;
+
+}
+
+#login {
+  color:#eee;
+  text-shadow:none;
+  text-decoration:none;
+  margin-top:4px;
+  float:right;
+}
+
+a:hover, a:visited, a:link, a:active
+{
+  text-decoration: none;
+  color: #333333;
+}
+
+#loginpage {
+  background-image: url(images/login.png);
+  background-size: 100% 100%;
+  font-family:'Lato', sans-serif;
+}
+
+#login_status {
+  color:#eee;
+  text-shadow:none;
+  font-size:40px;
+  text-align:center;
+  margin-top:30px;
+  margin-bottom:12px;
+}
+
+input#phone {
+  background:black;
+  border:1px solid #707072;
+  color:#ccc;
+  text-align:center;
+  padding:0;
+  text-shadow:none;
+  min-height:1.8em;
+}
+
+input#password {
+  background:black;
+  color:#ccc;
+  border:1px solid #707072;
+  padding:0;
+  text-shadow:none;
+  text-align:center;
+  min-height:1.8em;
+}
+
+::-webkit-input-placeholder { 
+  color:#707072; 
+  font-family:'Lato', sans-serif;
+
+::-moz-placeholder { 
+  color:#707072; 
+  font-family:'Lato', sans-serif;
+} 
+:-ms-input-placeholder {  
+  color:#707072;   
+  font-family:'Lato', sans-serif;
+}
+input:-moz-placeholder {
+  color:#707072;  
+  font-family:'Lato', sans-serif;
+}
+
