@@ -1,0 +1,64 @@
+<!DOCTYPE html> 
+<html>
+<head>
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU-PeXo4Aocq7-JS9SR4yUT1tFLLHFRWU&sensor=true&libraries=places"></script>
+    <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.js"></script>
+    <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.services.js"></script>
+    <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.extensions.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+    <script type="text/javascript">
+
+
+
+    </script>
+</head>
+
+<body>
+    <div data-role="page" id="mainpage">
+        <div data-role="panel" data-display="overlay" data-position="right" id="actionspanel">
+            <a href="#postmessage" class="ui-btn">Post Message</a>
+            <a href="#" class="ui-btn">Set Details</a>
+            <a href="#" class="ui-btn">Invite Friends</a>
+            <a href="#" class="ui-btn">View Pending Meetups</a>
+            <a href="#" class="ui-btn ui-btn-b">Cancel Current Meetup</a>
+        </div>
+        <div data-role="header">
+            <a href="#" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Logout</a>
+            <h1>Meetups</h1>
+            <a href="#actionspanel" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">
+                Actions
+            </a>
+        </div>
+        <div role="main" class="ui-content">
+            <div id="main_map" style="height:500px"></div>
+        </div>
+    </div>
+
+    <div data-role="page" id="postmessage">
+        <div data-role="header">
+            <a href="#mainpage" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
+            <h1>Post A Message</h1>
+            <a href="#" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" data-role="button" role="button">
+                Post
+            </a>
+        </div>
+        <div role="main" class="ui-content">
+            <form>
+                <!-- submit this using ajax -->
+                <label for="text-1">Subject: </label>
+                <input type="text" name="text-1" id="text-1" value="">
+                <label for="textarea-1">Message:</label>
+                <textarea name="textarea-1" id="textarea-1"></textarea>
+                <label for="image">Photo:</label>
+                <input type="file"  name="image" accept="image/*" capture>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
