@@ -1,11 +1,12 @@
 var defaultPosition = { 'center': '37.427474,-122.169719', 'zoom': 15 };
+var locationmap = null;
 
 // on load
 $(function() {
 
     $('#main_map').gmap({'center': defaultPosition.center, 'zoom': defaultPosition.zoom, 'disableDefaultUI': true, 'callback': function(map) {
         var self = this;
-
+        locationmap = map;
         // location services
         self.watchPosition(function(position, status) {
             if ( status === 'OK' ) {
@@ -54,7 +55,7 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
         var att_length = Object.keys(data.attendees).length;
         var counter = 0;
         $.each(data.attendees, function (i, attendee) {
-            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='100' height='100'/>" + "<a href='index.html#mainpage'>" + attendee.username + ": " + attendee.message + "</a>";
+            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='100' height='100'/>" + "<a href='index.html#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "</div></a>";
             var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
             if (counter == 0) {
                 //summarymessage += ' ui-first-child';
@@ -70,9 +71,9 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
     $('#friendslist').listview('refresh');
 });
 
-function updateCenter(lat, lon) {
-    console.log("here");
-    defaultPosition = { 'center': lat + ',' + lon, 'zoom': 15 };
+function updateCenter(lat, lon) {    
+    var map = $("#main_map").gmap("get", "map");
+    map.setCenter(new google.maps.LatLng(lat, lon));
 }
 
 function refreshMarkers() {
@@ -83,7 +84,7 @@ function refreshMarkers() {
             var marker_key = 'marker_user_' + attendee.id;
             var contents = attendee.username + ': ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
             if (attendee.photo_exists) {
-                contents += "<br><img src='api/get_picture.php?id=" + attendee.id + "' width='200' />";
+                contents += "<br><img src='api/get_picture.php?id=" + attendee.id + "' width='125' />";
             }
             if (marker_key in current_markers) {
                 current_markers[marker_key].setPosition(new google.maps.LatLng(attendee.latitude, attendee.longitude));
@@ -95,15 +96,14 @@ function refreshMarkers() {
                 $('#main_map').gmap('addMarker', { 
                     id: 'marker_user_' + attendee.id,
                     position: new google.maps.LatLng(attendee.latitude, attendee.longitude), 
-                    bounds: true 
+                    bounds: true,
+                    icon: 'images/jl-icon.gif' 
                 }).click(function() {
                     $('#main_map').gmap('openInfoWindow', { content: contents }, this);
                 });
             }
         });
     });
-
-    console.log($('#main_map').gmap('get','markers'));
 
     setTimeout(refreshMarkers, 2000);
 }
