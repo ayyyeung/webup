@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <html>
 <head>
-    <title>Page Title</title>
+    <title>Webup</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -20,6 +20,22 @@
 </head>
 
 <body>
+    <div data-role="page" id="loginpage">
+       <div data-role="header">
+            <h1>Webup Login</h1>
+       </div>
+       <div data-role="main" class="ui-content">
+            <div id="login_status">Please type in your phone # and password here.</div>
+            <form>
+                 <label for="phone">Phone Number:</label>
+                 <input type="tel" data-clear-btn="false" name="phone" id="phone" value="">
+                 <label for="password">Password:</label>
+                 <input type="passworD" data-clear-btn="false" name="password" id="password" value="">
+                 <a href="#" class="ui-btn" id="login">Login</a>
+            </form>
+       </div>
+    </div>
+
     <div data-role="page" id="mainpage">
         <div data-role="panel" data-display="overlay" data-position="right" id="actionspanel">
             <a href="#postmessage" class="ui-btn">Post Message</a>
@@ -30,7 +46,7 @@
         </div>
         <div data-role="header">
             <a href="#" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Logout</a>
-            <h1>Meetups</h1>
+            <h1>Webup</h1>
             <a href="#actionspanel" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">
                 Actions
             </a>
@@ -49,14 +65,12 @@
             </a>
         </div>
         <div role="main" class="ui-content">
-            <form>
-                <!-- submit this using ajax -->
-                <label for="text-1">Subject: </label>
-                <input type="text" name="text-1" id="text-1" value="">
+            <form action="api/set_status.php" method="post" data-ajax="false" enctype="multipart/form-data">
                 <label for="textarea-1">Message:</label>
-                <textarea name="textarea-1" id="textarea-1"></textarea>
+                <textarea name="message" id="message"></textarea>
                 <label for="image">Photo:</label>
                 <input type="file"  name="image" accept="image/*" capture>
+		<input type="submit" class="ui-btn" id="update_status" name="update_status" value="Update Status">
             </form>
         </div>
     </div>
