@@ -12,14 +12,37 @@ div.ui-header.ui-bar-inherit {
 }
 
 div.friend-status {
-  color:#aaa;
+  color:#696969;
+  margin-top:3px;
   font-weight:lighter;
-  font-size:12px;
+  font-size:13px;
+  margin-left:-20px;
 }
 
 a.friend-name { 
   color:black;
   text-decoration:none;
+  margin-left:-20px;
+}
+
+img {
+  vertical-align: middle;
+  padding-top: 3px;
+  padding-left: 5px;
+}
+
+li.ui-li-static.ui-body-inherit.ui-li-has-thumb {
+  min-height:2.8em;
+  padding-bottom:16px;
+}
+
+.ui-listview>.ui-li-static {
+  padding:.2em 1em;
+}
+
+.ui-page-theme-a a:visited, html .ui-bar-a a:visited, html .ui-body-a a:visited, html body .ui-group-theme-a a:visited {
+  color:black;
+  font-size:18px;
 }
 
 a.ui-link.ui-btn-left.ui-btn.ui-shadow.ui-corner-all {

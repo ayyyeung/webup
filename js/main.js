@@ -55,7 +55,8 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
         var att_length = Object.keys(data.attendees).length;
         var counter = 0;
         $.each(data.attendees, function (i, attendee) {
-            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='100' height='100'/>" + "<a href='index.html#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "</div></a>";
+            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='55' height='55'/>" + "<a href='index.html#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "</div></a>";
+
             var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
             if (counter == 0) {
                 //summarymessage += ' ui-first-child';
@@ -93,11 +94,13 @@ function refreshMarkers() {
                     $('#main_map').gmap('openInfoWindow', { content: contents }, this);
                 });
             } else {
+                var name = attendee.username.split(" ");
+                var icon_name = "images/" + name[0].substring(0,1).toLowerCase() + name[1].substring(0,1).toLowerCase() + "-icon.gif";
                 $('#main_map').gmap('addMarker', { 
                     id: 'marker_user_' + attendee.id,
                     position: new google.maps.LatLng(attendee.latitude, attendee.longitude), 
                     bounds: true,
-                    icon: 'images/jl-icon.gif' 
+                    icon: icon_name 
                 }).click(function() {
                     $('#main_map').gmap('openInfoWindow', { content: contents }, this);
                 });
