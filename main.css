@@ -94,7 +94,7 @@ a.ui-icon-plus.ui-btn-icon-left.ui-link.ui-btn {
 }
 
 
-#login {
+.login {
   color:#eee;
   text-shadow:none;
   text-decoration:none;
@@ -108,7 +108,7 @@ a:hover, a:visited, a:link, a:active
   color: #333333;
 }
 
-#loginpage {
+#create_event {
   background-image: url(images/login.png);
   background-size: 100% 100%;
   font-family:'Lato', sans-serif;
@@ -123,7 +123,7 @@ a:hover, a:visited, a:link, a:active
   margin-bottom:12px;
 }
 
-input#phone {
+input#username {
   background:black;
   border:1px solid #707072;
   color:#ccc;

@@ -16,4 +16,4 @@ if(isset($_FILES['image'])) {
   $stmt->execute();
 }
 
-print("<script type='text/javascript'>window.location = '../index.html#mainpage'</script>");
+print("<script type='text/javascript'>window.location = '../index.php#mainpage'</script>");

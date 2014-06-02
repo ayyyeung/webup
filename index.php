@@ -1,3 +1,4 @@
+<?php require("api/config.inc.php"); ?>
 <!DOCTYPE html> 
 <html>
 <head>
@@ -19,16 +20,22 @@
 </head>
 
 <body>
-    <div data-role="page" id="loginpage">
-       <div data-role="main" class="ui-content">
-            <div id="login_status">MeetUp</div>
-            <form data-enhance="false">
-                 <input type="tel" class="login-input" data-clear-btn="false" name="phone" id="phone" value="" placeholder="Phone">
-                 <input type="passworD" class="login-input" data-clear-btn="false" name="password" id="password" value="" placeholder="Password">
-                 <a href="#" id="login">Log in >></a>
+<?php if(!isset($_SESSION['user_id'])) { ?>
+    <div data-role="page" id="create_event">
+        <div data-role="main" class="ui-content">
+	    <div id="login_status">MeetUp</div>
+            <form method="post" action="api/create_event.php" data-ajax="false">
+                 <input type="text" id="username" name="username" class="login-input" placeholder="Full Name"/>
+                 <?php if (!isset($_GET['event']) || empty($_GET['event'])) { ?>
+                      <input type="submit" class="login" name="submit" value="Create MeetUp" />
+                 <?php } else { ?>
+                      <input type="hidden" name="event" value="<?=htmlentities($_GET['event']);?>" />
+                      <input type="submit" name="submit" class="login" value="Join This MeetUp" />
+                 <?php } ?>
             </form>
-       </div>
+        </div>
     </div>
+<?php } else { ?>
     <div data-role="page" id="mainpage">
         <div data-role="panel" data-display="overlay" data-position="right" id="actionspanel">
             <a href="#postmessage" class="ui-btn">Post Message</a>
@@ -38,20 +45,40 @@
             <a href="#" class="ui-btn ui-btn-b">Cancel Current Meetup</a>
         </div>
         <div data-role="header" style="background-color:#0b0b0b">
-            <a href="index.html#loginpage" style="margin-left:-8px;">Leave</a>
+            <a data-ajax="false" href="api/logout.php" style="margin-left:-8px;">Leave</a>
             <h1 style="background-color:#0b0b0b;color:white;text-shadow:none;min-height:1.1em;font-size:17px;">MeetUp</h1>
-            <!-- a href="#actionspanel" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-icon-gear ui-btn-icon-left ui-shadow ui-corner-all" data-role="button" role="button">
-                Actions
-            </a -->
         </div>
         <div role="main" class="ui-content">
             <div id="main_map" style="height:417px; margin:-15px -16px"></div>
         </div>
         <div data-role="footer">
            <div data-role="navbar">
-              <ul id="tools"><li><a href="#postmessage" class="ui-icon-edit ui-btn-icon-left">Post</li><li><a href="#" class="ui-icon-plus ui-btn-icon-left">Invite</a></li><li><a href="#summarypage" class="ui-icon-user ui-btn-icon-left">Friends</a></li></ul>
+              <ul id="tools">
+                <li>
+                  <a href="#postmessage" class="ui-icon-edit ui-btn-icon-left">Post</a>
+                </li>
+                <li>
+                  <a href="#getlink" class="ui-icon-plus ui-btn-icon-left">
+                    Invite
+                  </a>
+                </li>
+                <li>
+                   <a href="#summarypage" class="ui-icon-user ui-btn-icon-left">Friends</a>
+                </li>
+              </ul>
            </div>
         </div>
+    </div>
+
+    <div data-role="page" id="getlink">
+      <div data-role="header">
+        <a href="#mainpage" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
+        <h1>Invite Your Friends</h1>
+      </div>
+      <div role="main" class="ui-content">
+        To invite your friends, send them the link below!
+        <textarea name="link" id="link">http://<?=$_SERVER['HTTP_HOST']?>/event/<?=$_SESSION['event']?></textarea>
+      </div>
     </div>
 
     <div data-role="page" id="postmessage">
@@ -83,5 +110,6 @@
             </ul>
         </div>
     </div>
+<?php } ?>
 </body>
 </html>

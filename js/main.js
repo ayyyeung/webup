@@ -39,7 +39,7 @@ $(function() {
            phone: $("#phone").val(),
            password: $("#password").val()  
        }, function(data) { // success
-           window.location = "index.html#mainpage";
+           window.location = "index.php#mainpage";
        }).fail(function(data) { // failure
            $("#login_status").html("You have entered a wrong phone # or password.");
        });;
@@ -55,7 +55,7 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
         var att_length = Object.keys(data.attendees).length;
         var counter = 0;
         $.each(data.attendees, function (i, attendee) {
-            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='55' height='55'/>" + "<a href='index.html#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "</div></a>";
+            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='55' height='55'/>" + "<a href='index.php#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "</div></a>";
 
             var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
             if (counter == 0) {
@@ -78,6 +78,8 @@ function updateCenter(lat, lon) {
 }
 
 function refreshMarkers() {
+    console.log("in refreshmarkers");
+
     var current_markers = $('#main_map').gmap('get','markers');
 
     $.getJSON('api/get_users.php', function(data) {
@@ -94,8 +96,7 @@ function refreshMarkers() {
                     $('#main_map').gmap('openInfoWindow', { content: contents }, this);
                 });
             } else {
-                var name = attendee.username.split(" ");
-                var icon_name = "images/" + name[0].substring(0,1).toLowerCase() + name[1].substring(0,1).toLowerCase() + "-icon.gif";
+                var icon_name = "images/jl-icon.gif";
                 $('#main_map').gmap('addMarker', { 
                     id: 'marker_user_' + attendee.id,
                     position: new google.maps.LatLng(attendee.latitude, attendee.longitude), 
