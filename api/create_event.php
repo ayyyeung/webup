@@ -21,13 +21,14 @@ function generateRandomString($length = 10) {
     for ($i = 0; $i < $length; $i++) {
         $randomString .= $characters[rand(0, strlen($characters) - 1)];
     }
-    return $randomString;
+    //return $randomString;
+    return sha1($randomString);
 }
 
 if(isset($_POST['event'])) {
   $event = mysqli_real_escape_string($db, strtolower($_POST['event']));
 } else {
-  $event = generateFriendlyString();
+  $event = generateRandomString();
 }
 
 $name = mysqli_real_escape_string($db, $_POST['username']);
