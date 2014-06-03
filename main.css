@@ -2,10 +2,99 @@
   background-color:transparent;
   border-color:transparent;
   text-shadow:none;
-
 }
 
-#login {
+div.ui-header.ui-bar-inherit {
+  background-color:#0b0b0b;
+  color:#F8F8FF;
+  text-shadow:none;
+  font-size:17px;
+}
+
+div.friend-status {
+  color:#696969;
+  margin-top:3px;
+  font-weight:lighter;
+  font-size:13px;
+  margin-left:-20px;
+}
+
+a.friend-name { 
+  color:black;
+  text-decoration:none;
+  margin-left:-20px;
+}
+
+img {
+  vertical-align: middle;
+  padding-top: 3px;
+  padding-left: 5px;
+}
+
+li.ui-li-static.ui-body-inherit.ui-li-has-thumb {
+  min-height:2.8em;
+  padding-bottom:16px;
+}
+
+.ui-listview>.ui-li-static {
+  padding:.2em 1em;
+}
+
+.ui-page-theme-a a:visited, html .ui-bar-a a:visited, html .ui-body-a a:visited, html body .ui-group-theme-a a:visited {
+  color:black;
+  font-size:18px;
+}
+
+a.ui-link.ui-btn-left.ui-btn.ui-shadow.ui-corner-all {
+  background-color:transparent;
+  color:#F0F8FF;
+  text-shadow:none;
+  border:none;
+  font-weight:lighter;
+  box-shadow:none;
+  font-size:13px;
+}
+
+a.ui-icon-edit.ui-btn-icon-left.ui-link.ui-btn {
+  background-color:#0b0b0b;
+  border-color:white;
+  color:#F8F8FF;
+  text-shadow:0 1px 0 black;
+  height:20px;
+  font-size:15px;
+  line-height:1.2;
+}
+
+a.ui-icon-user.ui-btn-icon-left.ui-link.ui-btn {
+  background-color:#0b0b0b;
+  border-color:white;
+  color:white;
+  text-shadow:0 1px 0 black;
+  height:20px;
+  font-size:15px;
+  line-height:1.2;
+}
+
+div#main-map {
+  height:380px;
+}
+
+#tools{
+  margin-left:-2px;
+}
+
+a.ui-icon-plus.ui-btn-icon-left.ui-link.ui-btn {
+  background-color:#0b0b0b;
+  border-color:white;
+  color:white;
+  text-shadow:0 1px 0 black;
+  height:20px;
+  font-size:15px;
+  line-height:1.2;
+}
+
+
+.login {
   color:#eee;
   text-shadow:none;
   text-decoration:none;
@@ -19,7 +108,7 @@ a:hover, a:visited, a:link, a:active
   color: #333333;
 }
 
-#loginpage {
+#create_event {
   background-image: url(images/login.png);
   background-size: 100% 100%;
   font-family:'Lato', sans-serif;
@@ -34,7 +123,7 @@ a:hover, a:visited, a:link, a:active
   margin-bottom:12px;
 }
 
-input#phone {
+input#username {
   background:black;
   border:1px solid #707072;
   color:#ccc;
