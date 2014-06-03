@@ -48,6 +48,7 @@
         <div data-role="header" style="background-color:#0b0b0b">
             <a data-ajax="false" href="api/logout.php" style="margin-left:-8px;">Leave</a>
             <h1 style="background-color:#0b0b0b;color:white;text-shadow:none;min-height:1.1em;font-size:17px;">MeetUp</h1>
+	    <a href="#" data-icon="navigation" class="ui-btn-notext ui-btn-inline" id="nav-btn" style="height:15px;background-color:transparent;margin-top:2px;padding-right:0px"></a>
         </div>
         <div role="main" class="ui-content">
             <div id="main_map" style="height:417px; margin:-15px -16px"></div>

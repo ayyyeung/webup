@@ -28,6 +28,10 @@ input.login {
   border:none;
 }
 
+#create_event div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow:active {
+  background-color:#ac3637;
+}
+
 div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow {
   font-family:HelveticaNeue, 'Lato';
   font-size:16px;
@@ -39,6 +43,9 @@ div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow {
   border:none;
 }
 
+div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow:active {
+  background-color:#ac3637;
+}
 
 div.ui-header.ui-bar-inherit {
   background-color:#0b0b0b;

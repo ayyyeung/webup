@@ -2,6 +2,8 @@ var defaultPosition = { 'center': '37.427474,-122.169719', 'zoom': 18 };
 var locationmap = null;
 var numUsers = 0;
 var myPosition = null;
+var imageMapping = {};
+var firstTime = true;
 
 // on load
 $(function() {
@@ -31,7 +33,10 @@ $(function() {
 		// push position into server
                 $.post("api/push_position.php", { lat: position.coords.latitude, long: position.coords.longitude }, function(data) {
 		    myPosition = position;
-		    updateCenter(position.coords.latitude, position.coords.longitude);
+		    if (firstTime) {
+			updateCenter(position.coords.latitude, position.coords.longitude);
+			firstTime = false;
+		    }
                     console.log("posting position " + data);
                 });		
             } else {
@@ -54,6 +59,11 @@ $(function() {
            $("#login_status").html("You have entered a wrong phone # or password.");
        });;
     });
+    
+    $("#nav-btn").on('click', function(e) {
+	updateCenter(myPosition.coords.latitude, myPosition.coords.longitude);
+    });
+
 });
 $(document).on('pagebeforeshow', '#getlink', function() {
     $("#email").on('click', function(e) {
@@ -71,7 +81,9 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
     $('#friendslist').listview();
     $.getJSON('api/get_users.php', function(data) {
         var att_length = Object.keys(data.attendees).length;
+        console.log(att_length);
         $.each(data.attendees, function (i, attendee) {
+
            var distance = "";
 	    if (myPosition != null) {
 	        var attendeeLatLng = new google.maps.LatLng(attendee.latitude, attendee.longitude);
@@ -81,14 +93,18 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
 	    } else {
 	        distance = "Can't get exact distance";
 	    }
-            var contents = "<img src='api/get_picture.php?id=" + attendee.id + "' width='55' height='55'/>" + "<a href='index.php#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "\nDistance from you: " + distance + "</div></a>";
+            var contents = "<img src='" + imageMapping[attendee.id] + "' id='image" + attendee.id + "' " + "width='55' height='55'/>" + "<a href='index.php#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "\nDistance from you: " + distance + "</div></a>";
             var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
             summarymessage += '" style="border-bottom: 1px solid lightgrey">' + contents  + '</li>';
             console.log(summarymessage);
             $('#friendslist').append(summarymessage);
+	    	if (attendee.photo_exists) {
+			$('#image' + attendee.id).attr("src", "api/get_picture.php?id=" + attendee.id);
+	    }
         });
     });
     $('#friendslist').listview('refresh');
+    console.log("is refresh working?");
 });
 
 function updateCenter(lat, lon) {    
@@ -113,9 +129,6 @@ function refreshMarkers() {
 		//console.log("compared to: " + attendee.latitude);
                 var lat_diff = Math.abs(current_markers[marker_key].getPosition().lat() - attendee.latitude);
 		var lon_diff = Math.abs(current_markers[marker_key].getPosition().lng() - attendee.longitude);
-		//console.log(attendee.username + " " + attendee.latitude);
-		//console.log(attendee.username + " " + attendee.longitude);
-		//console.log(attendee.username + " lat diff: " + lat_diff + " lon diff: " + lon_diff);
 		if (lat_diff > 0.00002 || lon_diff > 0.00002) {
                 	current_markers[marker_key].setPosition(new google.maps.LatLng(attendee.latitude, attendee.longitude));
                 	google.maps.event.clearListeners(current_markers[marker_key], 'click');
@@ -134,6 +147,9 @@ function refreshMarkers() {
 		    prefix = "pink/";
 		}
                 var icon_name = "images/" + prefix + attendee.username.substring(0,1).toUpperCase() + ".png";
+		var cur_id = attendee.id;
+		imageMapping[cur_id] = icon_name; 
+		console.log("addeddd" + imageMapping[cur_id]);
                 $('#main_map').gmap('addMarker', { 
                     id: 'marker_user_' + attendee.id,
                     position: new google.maps.LatLng(attendee.latitude, attendee.longitude), 
