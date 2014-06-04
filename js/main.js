@@ -19,6 +19,26 @@ $(function() {
          input.setSelectionRange(0,999); 
      });
 
+    function getPersonalInfo() {
+      var contents = "This is your position.";
+      $.getJSON('api/get_myself.php', function(data) {
+        var att_length = Object.keys(data.attendees).length;
+	console.log(att_length);
+	if (att_length == 1) {
+	    console.log("asldkfjd");
+            contents = 'Your status: ' + data.attendees[0].message + '<br><em>Updated: ' + data.attendees[0].updated + '</em>';
+	    console.log(contents);
+            if (data.attendees[0].photo_exists) {
+                contents += "<br><img src='api/get_picture.php?id=" + data.attendees[0].id + "' width='125' />";
+            }
+ 
+	}
+      });
+      console.log(contents);
+      return contents;
+   
+    }
+
     $('#main_map').gmap({'center': defaultPosition.center, 'zoom': defaultPosition.zoom, 'disableDefaultUI': true, 'callback': function(map) {
         var self = this;
         locationmap = map;
@@ -29,7 +49,9 @@ $(function() {
                 var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 if (!self.get('markers').client) {
                     self.addMarker({ 'id': 'client', 'position': latlng, 'bounds': false }).click(function () {
-                        $('#main_map').gmap('openInfoWindow', { content: 'This is your position' }, this);
+			console.log("HER");
+			var myCalloutContent = getPersonalInfo();
+                        $('#main_map').gmap('openInfoWindow', { content: myCalloutContent }, this);
                     });
                 } else {
                     self.get('markers').client.setPosition(latlng);
@@ -42,7 +64,6 @@ $(function() {
 			updateCenter(position.coords.latitude, position.coords.longitude);
 			firstTime = false;
 		    }
-                    console.log("posting position " + data);
                 });		
             } else {
                 //alert('You need to enable location services to use this app!')
@@ -85,7 +106,6 @@ $(document).on('pagebeforeshow', '#getlink', function() {
 });
 
 $(document).on('pagebeforeshow', '#summarypage', function() {
-    console.log("runnin");
     $(".count").hide();
     newAttendeeAlert = false;
     numNewAttendees = 0;
@@ -93,7 +113,6 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
     $('#friendslist').listview();
     $.getJSON('api/get_users.php', function(data) {
         var att_length = Object.keys(data.attendees).length;
-        console.log(att_length);
         $.each(data.attendees, function (i, attendee) {
 
            var distance = "";
@@ -108,7 +127,6 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
             var contents = "<img src='" + imageMapping[attendee.id] + "' id='image" + attendee.id + "' " + "width='55' height='55'/>" + "<a href='tel:" + attendee.phone + "' id='call'>Call</a>" + "<a href='index.php#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "<p style='font-size:11px;margin-top:2px'>Distance from you: " + distance + "</p></div></a>";
             var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
             summarymessage += '" style="border-bottom: 1px solid lightgrey;height:30px;">' + contents  + '</li>';
-            console.log(summarymessage);
             $('#friendslist').append(summarymessage);
 	    	if (attendee.photo_exists) {
 			$('#image' + attendee.id).attr("src", "api/get_picture.php?id=" + attendee.id);
@@ -116,7 +134,6 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
         });
     });
     $('#friendslist').listview('refresh');
-    console.log("is refresh working?");
 });
 
 function updateCenter(lat, lon) {    
@@ -125,24 +142,20 @@ function updateCenter(lat, lon) {
 }
 
 function refreshMarkers() {
-    console.log("in refreshmarkers");
 
     var current_markers = $('#main_map').gmap('get','markers');
 
     $.getJSON('api/get_users.php', function(data) {
-        console.log("the length" + Object.keys(saved_attendees).length);
 	numNewAttendees = numNewAttendees + data.attendees.length - Object.keys(saved_attendees).length; 
 	if (numNewAttendees > 0) {
 		newAttendeeAlert = true;
 		$(".count").html("" + numNewAttendees);
 		$(".count").show();
 	}
-	console.log(numNewAttendees);
 	saved_attendees = {};
 	$.each(data.attendees, function(i, attendee) {
 	    	saved_attendees[attendee.id] = data.attendees[i];
 	});
-	console.log("should be updated");
 
         $.each(data.attendees, function (i, attendee) {
 	    if (attendee.id in saved_attendees) {

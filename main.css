@@ -5,25 +5,25 @@
 }
 
 .count {
-  display:none;
+  /*display:none;*/
   background:#ff0000;
   position: absolute; 
   top: 5px;
-  Right: 89px;
-  min-width:11px;
-  height: 11px;
+  right: 72%;
+  min-width:10px;
+  height: 10px;
   color:#ffffff;
   border-radius: 50%;
   padding: 2px;
   text-align: center;
-  font-size: 9px;
+  font-size: 8px;
   z-index:444;
 }
 
 #call {
   float:right;
-  margin-top:12px;
-  margin-right:7px;
+  margin-top:14px;
+  margin-right:6px;
   color:#228B22;
   cursor:pointer;
 }
