@@ -18,7 +18,8 @@ while($a = mysqli_fetch_assoc($rs)) {
     "updated" => date('F j Y g:ia', $a['curr_status_time']),
     "longitude" => $a['curr_longitude'],
     "latitude" => $a['curr_latitude'],
-    "photo_exists" => !is_null($a['photo'])
+    "photo_exists" => !is_null($a['photo']),
+    "phone" => $a['phone']
   );
 }
 

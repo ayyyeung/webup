@@ -4,6 +4,10 @@ var numUsers = 0;
 var myPosition = null;
 var imageMapping = {};
 var firstTime = true;
+var saved_attendees = {};
+var new_messages = 0;
+var newAttendeeAlert = false;
+var newMessageAlert = false;
 
 // on load
 $(function() {
@@ -63,6 +67,9 @@ $(function() {
     $("#nav-btn").on('click', function(e) {
 	updateCenter(myPosition.coords.latitude, myPosition.coords.longitude);
     });
+    $("#nav-btn")
+      .mousedown(function() {$(this).css("background-color","#8e8e8e");})
+      .mouseup(function() {$(this).css("background-color", "transparent");});
 
 });
 $(document).on('pagebeforeshow', '#getlink', function() {
@@ -70,11 +77,12 @@ $(document).on('pagebeforeshow', '#getlink', function() {
         e.stopImmediatePropagation();
         e.preventDefault();
         var link = $("#link").val();
-        urri = 'mailto:?subject=MeetUp with me!&body=Hey, come find me with MeetUp:'+ '%0A%0A' + link;
+        urri = 'mailto:?subject=MeetUp with me!&body=We can find each other with MeetUp!'+ '%0A%0A' + link;
         window.location=urri;
     });
 
 });
+
 $(document).on('pagebeforeshow', '#summarypage', function() {
     console.log("runnin");
     $("#friendslist").html("");
@@ -89,13 +97,13 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
 	        var attendeeLatLng = new google.maps.LatLng(attendee.latitude, attendee.longitude);
 	        var myLatLng = new google.maps.LatLng(myPosition.coords.latitude, myPosition.coords.longitude);
 	        var calcDistance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(attendeeLatLng, myLatLng));
-                distance = calcDistance.toString() + "m";
+                distance = "~"+calcDistance.toString() + "m";
 	    } else {
 	        distance = "Can't get exact distance";
 	    }
-            var contents = "<img src='" + imageMapping[attendee.id] + "' id='image" + attendee.id + "' " + "width='55' height='55'/>" + "<a href='index.php#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "\nDistance from you: " + distance + "</div></a>";
+            var contents = "<img src='" + imageMapping[attendee.id] + "' id='image" + attendee.id + "' " + "width='55' height='55'/>" + "<a href='tel:" + attendee.phone + "' id='call'>Call</a>" + "<a href='index.php#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "<p style='font-size:11px;margin-top:2px'>Distance from you: " + distance + "</p></div></a>";
             var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
-            summarymessage += '" style="border-bottom: 1px solid lightgrey">' + contents  + '</li>';
+            summarymessage += '" style="border-bottom: 1px solid lightgrey;height:30px;">' + contents  + '</li>';
             console.log(summarymessage);
             $('#friendslist').append(summarymessage);
 	    	if (attendee.photo_exists) {
@@ -118,6 +126,11 @@ function refreshMarkers() {
     var current_markers = $('#main_map').gmap('get','markers');
 
     $.getJSON('api/get_users.php', function(data) {
+	numNewAttendees = data.attendees.length - Object.keys(saved_attendees).length; 
+	if (numNewAttendees > 0) {
+		newAttendeeAlert = true;
+	}
+	console.log(numNewAttendees);
         $.each(data.attendees, function (i, attendee) {
             var marker_key = 'marker_user_' + attendee.id;
             var contents = attendee.username + ': ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
@@ -131,11 +144,11 @@ function refreshMarkers() {
 		var lon_diff = Math.abs(current_markers[marker_key].getPosition().lng() - attendee.longitude);
 		if (lat_diff > 0.00002 || lon_diff > 0.00002) {
                 	current_markers[marker_key].setPosition(new google.maps.LatLng(attendee.latitude, attendee.longitude));
+		}
                 	google.maps.event.clearListeners(current_markers[marker_key], 'click');
                 	google.maps.event.addListener(current_markers[marker_key], 'click', function() {
                     		$('#main_map').gmap('openInfoWindow', { content: contents }, this);
                 	});
-		}
             } else {
 		var prefix = "";
 		numUsers += 1;
@@ -160,6 +173,13 @@ function refreshMarkers() {
                 });
             }
         });
+	if (!newAttendeeAlert) {
+		saved_attendees = {};
+		$.each(data.attendees, function(i, attendee) {
+	    		saved_attendees[attendee.id] = data.attendees[i];
+		});
+	}
+
     });
 
     setTimeout(refreshMarkers, 2000);

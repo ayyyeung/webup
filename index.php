@@ -27,6 +27,7 @@
 	    <div id="login_status">MeetUp</div>
             <form method="post" action="api/create_event.php" data-ajax="false">
                  <input type="text" id="username" name="username" class="login-input" placeholder="Full Name"/>
+		 <input type="tel" data-clear-btn="false" name="phone" id="phone" class="login-input" placeholder="Phone Number" value=""/>
                  <?php if (!isset($_GET['event']) || empty($_GET['event'])) { ?>
                       <input type="submit" class="login" name="submit" value="Create meetup" />
                  <?php } else { ?>
@@ -48,7 +49,7 @@
         <div data-role="header" style="background-color:#0b0b0b">
             <a data-ajax="false" href="api/logout.php" style="margin-left:-8px;">Leave</a>
             <h1 style="background-color:#0b0b0b;color:white;text-shadow:none;min-height:1.1em;font-size:17px;">MeetUp</h1>
-	    <a href="#" data-icon="navigation" class="ui-btn-notext ui-btn-inline" id="nav-btn" style="height:15px;background-color:transparent;margin-top:2px;padding-right:0px"></a>
+	    <a href="#" data-icon="navigation" class="ui-btn-notext ui-btn-inline" id="nav-btn" style="height:15px;background-color:transparent;margin-top:5px;padding-top:7px;padding-bottom:6px;padding-right:0px"></a>
         </div>
         <div role="main" class="ui-content">
             <div id="main_map" style="height:417px; margin:-15px -16px"></div>
