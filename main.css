@@ -4,6 +4,22 @@
   text-shadow:none;
 }
 
+.count {
+  display:none;
+  background:#ff0000;
+  position: absolute; 
+  top: 5px;
+  Right: 89px;
+  min-width:11px;
+  height: 11px;
+  color:#ffffff;
+  border-radius: 50%;
+  padding: 2px;
+  text-align: center;
+  font-size: 9px;
+  z-index:444;
+}
+
 #call {
   float:right;
   margin-top:12px;

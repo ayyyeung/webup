@@ -8,6 +8,7 @@ var saved_attendees = {};
 var new_messages = 0;
 var newAttendeeAlert = false;
 var newMessageAlert = false;
+var numNewAttendees = 0;
 
 // on load
 $(function() {
@@ -85,6 +86,9 @@ $(document).on('pagebeforeshow', '#getlink', function() {
 
 $(document).on('pagebeforeshow', '#summarypage', function() {
     console.log("runnin");
+    $(".count").hide();
+    newAttendeeAlert = false;
+    numNewAttendees = 0;
     $("#friendslist").html("");
     $('#friendslist').listview();
     $.getJSON('api/get_users.php', function(data) {
@@ -126,12 +130,27 @@ function refreshMarkers() {
     var current_markers = $('#main_map').gmap('get','markers');
 
     $.getJSON('api/get_users.php', function(data) {
-	numNewAttendees = data.attendees.length - Object.keys(saved_attendees).length; 
+        console.log("the length" + Object.keys(saved_attendees).length);
+	numNewAttendees = numNewAttendees + data.attendees.length - Object.keys(saved_attendees).length; 
 	if (numNewAttendees > 0) {
 		newAttendeeAlert = true;
+		$(".count").html("" + numNewAttendees);
+		$(".count").show();
 	}
 	console.log(numNewAttendees);
+	saved_attendees = {};
+	$.each(data.attendees, function(i, attendee) {
+	    	saved_attendees[attendee.id] = data.attendees[i];
+	});
+	console.log("should be updated");
+
         $.each(data.attendees, function (i, attendee) {
+	    if (attendee.id in saved_attendees) {
+	      if (saved_attendees[attendee.id].message != attendee.message) {
+	        newMessage++;
+		newMessageAlert = true;
+	      }
+	    }
             var marker_key = 'marker_user_' + attendee.id;
             var contents = attendee.username + ': ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
             if (attendee.photo_exists) {
@@ -173,12 +192,6 @@ function refreshMarkers() {
                 });
             }
         });
-	if (!newAttendeeAlert) {
-		saved_attendees = {};
-		$.each(data.attendees, function(i, attendee) {
-	    		saved_attendees[attendee.id] = data.attendees[i];
-		});
-	}
 
     });
 
