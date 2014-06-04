@@ -4,6 +4,11 @@
   text-shadow:none;
 }
 
+.callout-img {
+  left:16%;
+  position:relative;
+}
+
 .count {
   /*display:none;*/
   background:#ff0000;

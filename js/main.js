@@ -9,34 +9,31 @@ var new_messages = 0;
 var newAttendeeAlert = false;
 var newMessageAlert = false;
 var numNewAttendees = 0;
+var directionsDisplay = null;
 
 // on load
 $(function() {
-    //$("#link").attr('readonly', 'readonly');
      $('#link').click(function(){
          var input = this;
          input.focus();
          input.setSelectionRange(0,999); 
      });
 
-    function getPersonalInfo() {
-      var contents = "This is your position.";
+    function getPersonalInfo(fromParent) {
       $.getJSON('api/get_myself.php', function(data) {
         var att_length = Object.keys(data.attendees).length;
 	console.log(att_length);
+       var contents = "This is your position.";
 	if (att_length == 1) {
 	    console.log("asldkfjd");
             contents = 'Your status: ' + data.attendees[0].message + '<br><em>Updated: ' + data.attendees[0].updated + '</em>';
 	    console.log(contents);
             if (data.attendees[0].photo_exists) {
-                contents += "<br><img src='api/get_picture.php?id=" + data.attendees[0].id + "' width='125' />";
+                contents += "<br><img src='api/get_picture.php?id=" + data.attendees[0].id + "' width='125' class='callout-img'/>";
             }
- 
 	}
+        $('#main_map').gmap('openInfoWindow', { content: contents }, fromParent);
       });
-      console.log(contents);
-      return contents;
-   
     }
 
     $('#main_map').gmap({'center': defaultPosition.center, 'zoom': defaultPosition.zoom, 'disableDefaultUI': true, 'callback': function(map) {
@@ -50,8 +47,7 @@ $(function() {
                 if (!self.get('markers').client) {
                     self.addMarker({ 'id': 'client', 'position': latlng, 'bounds': false }).click(function () {
 			console.log("HER");
-			var myCalloutContent = getPersonalInfo();
-                        $('#main_map').gmap('openInfoWindow', { content: myCalloutContent }, this);
+			getPersonalInfo(this);
                     });
                 } else {
                     self.get('markers').client.setPosition(latlng);
@@ -87,6 +83,10 @@ $(function() {
     });
     
     $("#nav-btn").on('click', function(e) {
+	if (directionsDisplay) {
+	    directionsDisplay.setMap(null);
+	    directionsDisplay = null;
+	}
 	updateCenter(myPosition.coords.latitude, myPosition.coords.longitude);
     });
     $("#nav-btn")
@@ -119,12 +119,12 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
 	    if (myPosition != null) {
 	        var attendeeLatLng = new google.maps.LatLng(attendee.latitude, attendee.longitude);
 	        var myLatLng = new google.maps.LatLng(myPosition.coords.latitude, myPosition.coords.longitude);
-	        var calcDistance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(attendeeLatLng, myLatLng));
-                distance = "~"+calcDistance.toString() + "m";
+	        var numericalDistance = Math.round(google.maps.geometry.spherical.computeDistanceBetween(attendeeLatLng, myLatLng));
+                distance = "~"+numericalDistance.toString() + "m";
 	    } else {
 	        distance = "Can't get exact distance";
 	    }
-            var contents = "<img src='" + imageMapping[attendee.id] + "' id='image" + attendee.id + "' " + "width='55' height='55'/>" + "<a href='tel:" + attendee.phone + "' id='call'>Call</a>" + "<a href='index.php#mainpage' onclick='updateCenter(" + attendee.latitude + "," + attendee.longitude + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "<p style='font-size:11px;margin-top:2px'>Distance from you: " + distance + "</p></div></a>";
+            var contents = "<img src='" + imageMapping[attendee.id] + "' id='image" + attendee.id + "' " + "width='55' height='55'/>" + "<a href='tel:" + attendee.phone + "' id='call'>Call</a>" + "<a href='index.php#mainpage' onclick='updateCenterCheckDistance(" + attendee.latitude + "," + attendee.longitude + "," + numericalDistance + ")' class='friend-name'>" + attendee.username + "<div class='friend-status'>" + attendee.message + "<p style='font-size:11px;margin-top:2px'>Distance from you: " + distance + "</p></div></a>";
             var summarymessage = '<li class="ui-li-static ui-body-inherit ui-li-has-thumb';
             summarymessage += '" style="border-bottom: 1px solid lightgrey;height:30px;">' + contents  + '</li>';
             $('#friendslist').append(summarymessage);
@@ -136,6 +136,46 @@ $(document).on('pagebeforeshow', '#summarypage', function() {
     $('#friendslist').listview('refresh');
 });
 
+function updateCenterWithDirections(lat, lon) {    
+    var map = $("#main_map").gmap("get", "map");
+    map.setCenter(new google.maps.LatLng(lat, lon));
+    var directionsService = new google.maps.DirectionsService();
+    if (directionsDisplay) {
+      directionsDisplay.setMap(null);
+      directionsDisplay = null;
+    }
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsDisplay.setMap(map);
+    directionsDisplay.setOptions( { suppressMarkers: true } ); 
+    console.log(myPosition);
+    var dest = new google.maps.LatLng(lat, lon);
+    var request = {
+        origin:new google.maps.LatLng(myPosition.coords.latitude, myPosition.coords.longitude),
+	destination:dest,
+	travelMode: google.maps.TravelMode.WALKING
+    };
+    directionsService.route(request, function(result, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+	directionsDisplay.setDirections(result);
+	map.setZoom(14);
+	console.log("zoom: " + map.getZoom());
+      }
+    });
+}
+
+function updateCenterCheckDistance(lat, lon, dist) {
+    if (directionsDisplay) {
+	directionsDisplay.setMap(null);
+	directionsDisplay = null;
+    }
+    if (dist > 200) {
+	console.log("HERE");
+	updateCenterWithDirections(lat, lon);
+    } else {    
+        var map = $("#main_map").gmap("get", "map");
+        map.setCenter(new google.maps.LatLng(lat, lon));
+    }
+}
 function updateCenter(lat, lon) {    
     var map = $("#main_map").gmap("get", "map");
     map.setCenter(new google.maps.LatLng(lat, lon));
@@ -167,7 +207,7 @@ function refreshMarkers() {
             var marker_key = 'marker_user_' + attendee.id;
             var contents = attendee.username + ': ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
             if (attendee.photo_exists) {
-                contents += "<br><img src='api/get_picture.php?id=" + attendee.id + "' width='125' />";
+                contents += "<br><img src='api/get_picture.php?id=" + attendee.id + "' width='125' class='callout-img' />";
             }
             if (marker_key in current_markers) {
 		//console.log(current_markers[marker_key].getPosition().lat());
@@ -184,13 +224,11 @@ function refreshMarkers() {
             } else {
 		var prefix = "";
 		numUsers += 1;
-		if (numUsers % 4 == 1) {
+		if (numUsers % 3 == 1) {
 		    prefix = "blue/";
-		} else if (numUsers % 4 == 2) {
+		} else if (numUsers % 3 == 2) {
 		    prefix = "purple/";
-		} else if (numUsers % 4 == 3) {
-		    prefix = "pink/";
-		}
+		} 
                 var icon_name = "images/" + prefix + attendee.username.substring(0,1).toUpperCase() + ".png";
 		var cur_id = attendee.id;
 		imageMapping[cur_id] = icon_name; 

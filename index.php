@@ -15,6 +15,7 @@
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.js"></script>
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.services.js"></script>
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.extensions.js"></script>
+    <script type="text/javascript" src="js/JIC.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript">
     </script>
