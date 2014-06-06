@@ -4,7 +4,7 @@ require("config.inc.php");
 
 $cond = " WHERE 0";
 if(isset($_SESSION['user_id'])) {
-   $cond = " WHERE `id` <> ".$_SESSION['user_id']." AND `event_name` = '".$_SESSION['event']."'";
+   $cond = " WHERE `id` = ".$_SESSION['user_id']." AND `event_name` = '".$_SESSION['event']."'";
 }
 
 $rs = mysqli_query($db, "SELECT * FROM users $cond");

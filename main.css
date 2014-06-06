@@ -4,11 +4,85 @@
   text-shadow:none;
 }
 
+.callout-img {
+  left:16%;
+  position:relative;
+}
+
+.count {
+  /*display:none;*/
+  background:#ff0000;
+  position: absolute; 
+  top: 5px;
+  right: 72%;
+  min-width:10px;
+  height: 10px;
+  color:#ffffff;
+  border-radius: 50%;
+  padding: 2px;
+  text-align: center;
+  font-size: 8px;
+  z-index:444;
+}
+
+#call {
+  float:right;
+  margin-top:14px;
+  margin-right:6px;
+  color:#228B22;
+  cursor:pointer;
+}
+
+#invite_msg{
+  font-weight:400;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('http://fonts.googleapis.com/css?family=Lato:300,400,700,900;');
+}
+
+input.login {
+  font-family: 'Lato';
+}
+
+#create_event div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow {
+  font-family:'Lato';
+  font-size:16px;
+  color:white;
+  background-color: #c03d3e;/*
+  background-color:#0f4a6f*/;
+  text-shadow:none;
+  margin-top:10px;
+  border:none;
+}
+
+#create_event div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow:active {
+  background-color:#ac3637;
+}
+
+div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow {
+  font-family:HelveticaNeue, 'Lato';
+  font-size:16px;
+  color:white;
+  background-color: #c03d3e;/*
+  background-color:#0f4a6f*/;
+  text-shadow:none;
+  margin-top:10px;
+  border:none;
+}
+
+div.ui-btn.ui-input-btn.ui-corner-all.ui-shadow:active {
+  background-color:#ac3637;
+}
+
 div.ui-header.ui-bar-inherit {
   background-color:#0b0b0b;
   color:#F8F8FF;
   text-shadow:none;
   font-size:17px;
+  font-family:'Lato';
+  font-weight:700;
 }
 
 div.friend-status {
@@ -52,7 +126,8 @@ a.ui-link.ui-btn-left.ui-btn.ui-shadow.ui-corner-all {
   border:none;
   font-weight:lighter;
   box-shadow:none;
-  font-size:13px;
+  font-size:14px;
+  font-family:'Lato';
 }
 
 a.ui-icon-edit.ui-btn-icon-left.ui-link.ui-btn {
@@ -63,6 +138,11 @@ a.ui-icon-edit.ui-btn-icon-left.ui-link.ui-btn {
   height:20px;
   font-size:15px;
   line-height:1.2;
+  font-family:'Lato';
+}
+
+div.ui-content {
+  font-family:'Lato';
 }
 
 a.ui-icon-user.ui-btn-icon-left.ui-link.ui-btn {
@@ -75,8 +155,8 @@ a.ui-icon-user.ui-btn-icon-left.ui-link.ui-btn {
   line-height:1.2;
 }
 
-div#main-map {
-  height:380px;
+div#main_map {
+  height:100%;
 }
 
 #tools{
@@ -121,7 +201,21 @@ a:hover, a:visited, a:link, a:active
   text-align:center;
   margin-top:30px;
   margin-bottom:12px;
+  font-weight:300;
 }
+
+input#phone {
+  background:black;
+  border:1px solid #707072;
+  color:#ccc;
+  text-align:center;
+  padding:0;
+  text-shadow:none;
+  min-height:2.3em;
+  height:1.5em;
+  font-weight:300;
+}
+
 
 input#username {
   background:black;
@@ -130,8 +224,11 @@ input#username {
   text-align:center;
   padding:0;
   text-shadow:none;
-  min-height:1.8em;
+  min-height:2.3em;
+  height:1.5em;
+  font-weight:300;
 }
+
 
 input#password {
   background:black;

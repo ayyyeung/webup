@@ -5,16 +5,18 @@
     <title style="background-color:#333">MeetUp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name=apple-mobile-web-app-capable content=yes>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
     <link rel="stylesheet" type="text/css" href="main.css" />
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU-PeXo4Aocq7-JS9SR4yUT1tFLLHFRWU&sensor=true&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU-PeXo4Aocq7-JS9SR4yUT1tFLLHFRWU&sensor=true&libraries=places&libraries=geometry"></script>
+    <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false"></script>-->
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.js"></script>
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.services.js"></script>
     <script type="text/javascript" src="js/jqm-gmaps/jquery.ui.map.extensions.js"></script>
+    <script type="text/javascript" src="js/JIC.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=Lato:100,300' rel='stylesheet' type='text/css'>
     <script type="text/javascript">
     </script>
 </head>
@@ -26,11 +28,12 @@
 	    <div id="login_status">MeetUp</div>
             <form method="post" action="api/create_event.php" data-ajax="false">
                  <input type="text" id="username" name="username" class="login-input" placeholder="Full Name"/>
+		 <input type="tel" data-clear-btn="false" name="phone" id="phone" class="login-input" placeholder="Phone Number" value=""/>
                  <?php if (!isset($_GET['event']) || empty($_GET['event'])) { ?>
-                      <input type="submit" class="login" name="submit" value="Create MeetUp" />
+                      <input type="submit" class="login" name="submit" value="Create meetup" />
                  <?php } else { ?>
                       <input type="hidden" name="event" value="<?=htmlentities($_GET['event']);?>" />
-                      <input type="submit" name="submit" class="login" value="Join This MeetUp" />
+                      <input type="submit" name="submit" class="login" value="Join MeetUp" />
                  <?php } ?>
             </form>
         </div>
@@ -47,6 +50,7 @@
         <div data-role="header" style="background-color:#0b0b0b">
             <a data-ajax="false" href="api/logout.php" style="margin-left:-8px;">Leave</a>
             <h1 style="background-color:#0b0b0b;color:white;text-shadow:none;min-height:1.1em;font-size:17px;">MeetUp</h1>
+	    <a href="#" data-icon="navigation" class="ui-btn-notext ui-btn-inline" id="nav-btn" style="height:15px;background-color:transparent;margin-top:5px;padding-top:7px;padding-bottom:6px;padding-right:0px"></a>
         </div>
         <div role="main" class="ui-content">
             <div id="main_map" style="height:417px; margin:-15px -16px"></div>
@@ -63,7 +67,7 @@
                   </a>
                 </li>
                 <li>
-                   <a href="#summarypage" class="ui-icon-user ui-btn-icon-left">Friends</a>
+                   <a href="#summarypage" class="ui-icon-user ui-btn-icon-left"><span class="count">1</span>Friends</a>
                 </li>
               </ul>
            </div>
@@ -73,11 +77,13 @@
     <div data-role="page" id="getlink">
       <div data-role="header">
         <a href="#mainpage" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
-        <h1>Invite Your Friends</h1>
+        <h1>Invite</h1>
       </div>
       <div role="main" class="ui-content">
-        To invite your friends, send them the link below!
-        <textarea name="link" id="link">http://<?=$_SERVER['HTTP_HOST']?>/event/<?=$_SESSION['event']?></textarea>
+        <span id="invite_msg">Invite people by texting the link below!</span>
+        <textarea onfocus="this.select()" onmouseup="return false;" name="link" id="link">http://<?=$_SERVER['HTTP_HOST']?>/event/<?=$_SESSION['event']?></textarea>
+        <div style="text-align:center;width:100%;font-weight:900;"> - or - </div>
+        <input type="submit" class="login" id="email" name="submit" value="Send by Email" />
       </div>
     </div>
 
@@ -85,9 +91,6 @@
         <div data-role="header">
             <a href="#mainpage" class="ui-btn-left ui-link ui-btn ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
             <h1>Post Status</h1>
-            <a href="#" data-icon="gear" class="ui-btn-right ui-link ui-btn ui-btn-b ui-shadow ui-corner-all" data-role="button" role="button">
-                Post
-            </a>
         </div>
         <div role="main" class="ui-content">
             <form action="api/set_status.php" method="post" data-ajax="false" enctype="multipart/form-data">

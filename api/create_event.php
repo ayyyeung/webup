@@ -32,8 +32,8 @@ if(isset($_POST['event'])) {
 }
 
 $name = mysqli_real_escape_string($db, $_POST['username']);
-
-mysqli_query($db, "INSERT INTO `users` VALUES (NULL, '".$name."', '-122.169719', '37.427474', 'Just joined!', ".time().", NULL, '".$event."')");
+$phone = mysqli_real_escape_string($db, $_POST['phone']);
+mysqli_query($db, "INSERT INTO `users` VALUES (NULL, '".$name."', '-122.169719', '37.427474', 'Just joined!', ".time().", NULL, '".$event."', '".$phone."')");
 
 $_SESSION['user_id'] = mysqli_insert_id($db);
 $_SESSION['event'] = $event;
