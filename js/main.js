@@ -26,7 +26,7 @@ $(function() {
        var contents = "This is your position.";
 	if (att_length == 1) {
 	    console.log("asldkfjd");
-            contents = 'Your status: ' + data.attendees[0].message + '<br><em>Updated: ' + data.attendees[0].updated + '</em>';
+            contents = '<b>Your status:</b> ' + data.attendees[0].message + '<br><em>Updated: ' + data.attendees[0].updated + '</em>';
 	    console.log(contents);
             if (data.attendees[0].photo_exists) {
                 contents += "<br><img src='api/get_picture.php?id=" + data.attendees[0].id + "' width='125' class='callout-img'/>";
@@ -105,6 +105,10 @@ $(document).on('pagebeforeshow', '#getlink', function() {
 
 });
 
+$(document).on('pagebeforeshow', '#mainpage', function() {
+	$(".count").hide();
+});
+
 $(document).on('pagebeforeshow', '#summarypage', function() {
     $(".count").hide();
     newAttendeeAlert = false;
@@ -168,7 +172,7 @@ function updateCenterCheckDistance(lat, lon, dist) {
 	directionsDisplay.setMap(null);
 	directionsDisplay = null;
     }
-    if (dist > 200) {
+    if (dist > 100) {
 	console.log("HERE");
 	updateCenterWithDirections(lat, lon);
     } else {    
@@ -186,7 +190,8 @@ function refreshMarkers() {
     var current_markers = $('#main_map').gmap('get','markers');
 
     $.getJSON('api/get_users.php', function(data) {
-	numNewAttendees = numNewAttendees + data.attendees.length - Object.keys(saved_attendees).length; 
+	numNewAttendees = numNewAttendees + data.attendees.length - Object.keys(saved_attendees).length;
+	 
 	if (numNewAttendees > 0) {
 		newAttendeeAlert = true;
 		$(".count").html("" + numNewAttendees);
@@ -205,7 +210,7 @@ function refreshMarkers() {
 	      }
 	    }
             var marker_key = 'marker_user_' + attendee.id;
-            var contents = attendee.username + ': ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
+            var contents = '<b>' + attendee.username + ':</b> ' + attendee.message + '<br><em>Updated: ' + attendee.updated + '</em>';
             if (attendee.photo_exists) {
                 contents += "<br><img src='api/get_picture.php?id=" + attendee.id + "' width='125' class='callout-img' />";
             }

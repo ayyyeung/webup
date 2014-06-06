@@ -10,7 +10,7 @@
 }
 
 .count {
-  /*display:none;*/
+  display:none;
   background:#ff0000;
   position: absolute; 
   top: 5px;

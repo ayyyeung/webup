@@ -67,7 +67,7 @@
                   </a>
                 </li>
                 <li>
-                   <a href="#summarypage" class="ui-icon-user ui-btn-icon-left"><span class="count">1</span>Friends</a>
+                   <a href="#summarypage" class="ui-icon-user ui-btn-icon-left"><span class="count">3</span>Friends</a>
                 </li>
               </ul>
            </div>
